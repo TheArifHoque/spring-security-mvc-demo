@@ -13,9 +13,16 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.
-                authorizeHttpRequests(abc -> abc
-                        .requestMatchers(antMatcher("/home")).permitAll()
+                authorizeHttpRequests(authConfig -> authConfig
+                        .requestMatchers("/home").permitAll()
                         .anyRequest().authenticated()
+                )
+                .formLogin(loginConfig -> loginConfig
+                        .loginPage("/home")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .loginProcessingUrl("/login")
+                        .successForwardUrl("/user")
                 )
                 .build();
     }

@@ -14,9 +14,9 @@
     <!-- Main Container Start -->
     <div class="container py-5 px-4">
         <h1 class="mb-5 text-center">Spring Security Home Page</h1>
-        <form class="card bg-dark text-light py-5 px-4" action="/login" method="post">
-            <p class="mt-2">Enter Email</p>
-            <input type="email" name="email">
+        <form class="card bg-dark text-light py-5 px-4" th:action="@{/login}" method="post">
+            <p class="mt-2">Enter Username</p>
+            <input type="text" name="username">
             <p class="mt-2">Enter Password</p>
             <input type="password" name="password">
             <p class="text-danger warning mt-2" th:if="${warning}" th:text="${warning}"></p>
