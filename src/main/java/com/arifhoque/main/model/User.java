@@ -1,12 +1,11 @@
 package com.arifhoque.main.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,4 +19,11 @@ public class User {
     private String name;
     private String email;
     private String password;
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority_mapping",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
+    )
+    private Set<Authority> authorities;
 }

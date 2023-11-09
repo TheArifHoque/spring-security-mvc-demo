@@ -3,6 +3,8 @@ package com.arifhoque.main.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -35,11 +37,16 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.
-                authorizeHttpRequests(authConfig -> authConfig
-                        .requestMatchers("/home").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/user").hasRole("USER")
+        return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .headers(headersConfig -> headersConfig
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
+                )
+                .authorizeHttpRequests(authConfig -> authConfig
+                        .requestMatchers(antMatcher("/h2-console/**")).permitAll()
+                        .requestMatchers(antMatcher("/home")).permitAll()
+                        .requestMatchers(antMatcher("/admin")).hasRole("ADMIN")
+                        .requestMatchers(antMatcher("/user")).hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(loginConfig -> loginConfig
