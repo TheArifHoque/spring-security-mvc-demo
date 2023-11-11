@@ -1,5 +1,7 @@
 package com.arifhoque.main.config;
 
+import com.arifhoque.main.service.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,23 +19,26 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @Configuration
 public class WebSecurityConfig {
 
+    @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user1 = User.withUsername("Arif")
-                .password("1234")
-                .roles("USER")
-                .build();
-        UserDetails user2 = User.withUsername("Hoque")
-                .password("abcd")
-                .roles("ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user1,user2);
-    }
+//    @Bean
+//    public InMemoryUserDetailsManager userDetailsService() {
+//        UserDetails user1 = User.withUsername("Arif")
+//                .password("1234")
+//                .roles("USER")
+//                .build();
+//        UserDetails user2 = User.withUsername("Hoque")
+//                .password("abcd")
+//                .roles("ADMIN")
+//                .build();
+//        return new InMemoryUserDetailsManager(user1,user2);
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -60,6 +65,7 @@ public class WebSecurityConfig {
                 .logout(logoutConfig -> logoutConfig
                         .logoutUrl("/logout")
                 )
+                .userDetailsService(customUserDetailsService)
                 .build();
     }
 }
